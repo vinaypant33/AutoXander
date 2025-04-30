@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Resume Builder</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div id="tab-buttons" class="tab-buttons">
+        <button id="contentTab" class="tab-button active" onclick="showTab('content')">Content</button>
+        <button id="customizeTab" class="tab-button" onclick="showTab('customize')">Customize</button>
+      </div>
+
+      <div id="content" class="tab-content">
+        <div id="sections"></div>
+      </div>
+
+      <div id="customize" class="tab-content" style="display:none;">
+        <div id="customize-controls">
+          <label>Filename:</label>
+          <input type="text" id="filenameInput" placeholder="Enter filename without extension">
+
+          <label>Font Size: <span id="fontSizeValue">14</span>px</label>
+          <input type="range" id="fontSizeSlider" min="10" max="20" value="14" onchange="adjustFontSize()">
+
+          <label>Font Family:</label>
+          <select id="fontFamilySelector" onchange="adjustFontFamily()">
+            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="Tahoma, sans-serif">Tahoma</option>
+          </select>
+
+          <label>Column Split (%): <span id="leftColumnValue">44</span></label>
+          <input type="range" id="columnSplitSlider" min="30" max="70" value="44" onchange="adjustColumns()">
+
+          <label>Margin (mm): <span id="marginValue">20</span></label>
+          <input type="range" id="marginSlider" min="10" max="30" value="20" onchange="adjustMargin()">
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <button id="downloadBtn" class="download-btn" onclick="downloadPDF()">
+          <i class="fas fa-file-download"></i> Download PDF
+        </button>
+      </div>
+
+      <div id="resume" class="resume">
+        <div id="left-column" class="left-column"></div>
+        <div class="divider-line"></div> <!-- Divider line -->
+        <div id="right-column" class="right-column"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
