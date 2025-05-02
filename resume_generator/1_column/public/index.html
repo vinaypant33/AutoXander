@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATS-Friendly Resume Builder</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="tab-buttons">
+        <button class="active" onclick="showTab('content')">Content</button>
+        <button onclick="showTab('customize')">Customize</button>
+      </div>
+      <div id="content" class="tab-content">
+        <div id="sections"></div>
+      </div>
+      <div id="customize" class="tab-content" style="display: none;">
+        <label>Font Size: <span id="fontSizeValue">14</span>px</label>
+        <input type="range" id="fontSizeSlider" min="10" max="20" value="14" onchange="adjustFontSize()">
+
+        <label>Font Family:</label>
+        <select id="fontFamilySelector" onchange="adjustFontFamily()">
+          <option value="'Segoe UI', sans-serif">Segoe UI</option>
+          <option value="Arial, sans-serif">Arial</option>
+          <option value="Georgia, serif">Georgia</option>
+          <option value="'Times New Roman', serif">Times New Roman</option>
+        </select>
+
+        <label>Page Margin (px)</label>
+        <input type="range" id="marginSlider" min="20" max="80" value="40" onchange="adjustMargin()">
+        <span id="marginValue">40px</span>
+
+        <label>Resume File Name</label>
+        <input type="text" id="resumeName" placeholder="Enter file name (optional)" />
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <button class="download-btn" onclick="downloadPDF()">
+          <i class="fas fa-file-download"></i> Download PDF
+        </button>
+      </div>
+      <div id="resume" class="resume single-column">
+        <div id="resume-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
