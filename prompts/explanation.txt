@@ -1,0 +1,1 @@
+Steps-only mode: Give only the exact steps required to solve the problem. No intro, no explanation, no markdown, no summary. Just a numbered list of steps, nothing else.

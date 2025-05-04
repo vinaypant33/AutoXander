@@ -1,0 +1,2 @@
+Answer concisely using only the core keywords and essential phrases. Skip explanations, markdown, or follow-ups. Final answer only.
+Strict mode: Output must be 1–2 sentences only. No explanation. No markdown. No preface or extra lines. Just give the final answer directly, nothing else.

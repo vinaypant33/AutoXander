@@ -17,9 +17,22 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "chat_model.gguf")
+
+
 
 def single_chat(current_prompt , number_control = 8192 , verbose_confirm  = False , number_batch  = 128 , number_threads = 8 ):
-    llm  = Llama(model_path=r"models\chat_model.gguf" , n_ctx=number_control , verbose=verbose_confirm , n_batch=number_batch , n_threads=number_threads)
+    # llm  = Llama(model_path=r"models\chat_model.gguf" , n_ctx=number_control , verbose=verbose_confirm , n_batch=number_batch , n_threads=number_threads)
+    llm = Llama(
+    model_path=MODEL_PATH,
+    n_ctx=number_control,
+    verbose=False,
+    n_batch=number_batch,
+    n_threads=number_threads,
+    # n_gpu_layers=40,  # Offloads the first 100 layers to GPU
+    n_gpu_layers=-1
+)
     response = llm(current_prompt , max_tokens=512 , stop=["</s>"] )
     return (response['choices'][0]["text"])
 
@@ -61,3 +74,9 @@ def fileOpener():
 
     except Exception as e:
         return f"Error parsing file: {e}"
+
+
+
+
+
+# print(single_chat("tell me somethig about you"))
