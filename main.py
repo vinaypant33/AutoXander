@@ -30,6 +30,9 @@ chat_data['answer'] = []
 
 
 
+first_run = True
+
+
 
 def status_updater(text):
     log_box.configure(state='normal')
@@ -49,33 +52,49 @@ def status_updater(text):
 
 def llm_message():
     print("LLM Model Started......")
-    # current_message  = prompt_box.get("1.0" , "end").strip()
-    # prompt_box.delete("1.0" , "end")
-    # chat_data['chat'].append(current_message)
+    current_message  = prompt_box.get("1.0" , "end").strip()
+    prompt_box.delete("1.0" , "end")
+    chat_data['chat'].append(current_message)
+    with open("prompts\\base.txt" , "r") as first_file:
+        current_text = first_file.read()
+        current_message = current_text + "\n" + current_message
     # pub.sendMessage("prompt_message" , prompt_message  = current_message)
-    # # answer  = llm_model.single_chat(current_message , number_control=2048 , number_batch=512 , number_threads=12)
+    # answer  = llm_model.single_chat(current_message , number_control=2048 , number_batch=512 , number_threads=12)
     # answer = llm_model.single_chat(current_message)
     # print(answer)
     # chat_data
     # status_updater("Entered Prompt :: " + current_message)
     # prompt_box.delete("1.0" , "end")
     # return "break"
-    current_message = prompt_box.get("1.0", "end").strip()
-    prompt_box.delete("1.0", "end")
-    chat_data['chat'].append(current_message)
-    # pub.sendMessage("prompt_message", prompt_message=current_message)
+    # current_message = prompt_box.get("1.0", "end").strip()
+    # prompt_box.delete("1.0", "end")
+    # chat_data['chat'].append(current_message)
+    # # pub.sendMessage("prompt_message", prompt_message=current_message)
 
 
 
-    if llm_model is None:
-        status_updater("Model is still loading. Please wait...")
-        return "break"
+    # if llm_model is None:
+    #     status_updater("Model is still loading. Please wait...")
+    #     return "break"
 
     answer = llm_model.single_chat(current_message)
     print(answer)
     status_updater("Entered Prompt :: " + current_message)
     status_updater("Result :: " + answer)
     return "break"
+
+
+
+    # ### Working : Check for the first run and then if the first run is completed then feed the html to the chatgpt again and agian
+    # # With each run feed the predefined instructions again and agin and then check for the source code : and feed it agian in the same chat : 
+    # # This way the model would know what it needs to do and get the reference from the previous chat as well : 
+    # if first_run == True:
+    #     current_message = 
+    
+
+    
+    
+
 
 
 # def start_model_loading():
@@ -103,9 +122,9 @@ def start_model_loading():
         playwright_main.main_working()
 
 
-    Thread(target=model_loader, daemon=True).start()
+    # Thread(target=model_loader, daemon=True).start()
     Thread(target=delayed_llm_start, daemon=True).start()
-    Thread(target=playwright_working , daemon=True).start()
+    # Thread(target=playwright_working , daemon=True).start()
 
 
 
@@ -118,6 +137,12 @@ def reset_function():
     log_box.configure(state="normal") 
     log_box.delete("1.0" , "end")
     log_box.insert("1.0" , "Current Status......")
+
+def update_slider_text(value):
+    # Move and update label as the slider value changes
+    x_pos = int(slider.winfo_width() * (value / slider.cget("to")))
+    slider_value_label.place(x=(x_pos // 2 ) + 320, y=8)  # Adjust X for centering
+    slider_value_label.configure(text=str(int(value)))
 
 
 ## laod the assets from the files : 
@@ -172,7 +197,9 @@ enter_button = ctk.CTkButton(frame_3 , image=upload_image , text=""  , height=3 
 mood_selector  = ctk.CTkComboBox(frame_3 , values=['Chat' , 'Resume' , 'Job Application' , 'Search' , 'General'] , width=200)
 upload_file_button  = ctk.CTkButton(frame_3 , image=upload_image_clip , text="" , height=2 , width=2 , corner_radius=10 , command=file_reader)
 restart_button = ctk.CTkButton(frame_3 , image=restart_button_image , text="" , height=2 , width=2 , corner_radius=10 , command=reset_function)
-
+slider  = ctk.CTkSlider(frame_3  , from_=0, to=100, command=update_slider_text)
+slider.set(0)
+slider_value_label = ctk.CTkLabel(frame_3, text=str(int(slider.get())))
 
 # Configure the Control : 
 frame_1.pack_propagate(False)
@@ -203,6 +230,8 @@ enter_button.place(x = 4 , y = 8)
 mood_selector.place(x = 40 , y = 8)
 upload_file_button.place(x = 660 , y = 8)
 restart_button.place(x = 250 , y = 8)
+slider.place(x = 300 , y  = 14)
+slider_value_label.place(x = 485 , y = 8)
 
 
 if __name__ == '__main__':

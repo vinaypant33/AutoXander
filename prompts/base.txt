@@ -1,2 +1,311 @@
-Answer concisely using only the core keywords and essential phrases. Skip explanations, markdown, or follow-ups. Final answer only.
-Strict mode: Output must be 1–2 sentences only. No explanation. No markdown. No preface or extra lines. Just give the final answer directly, nothing else.
+You are an expert code generator. Below are the cumulative instructions given so far. Generate code based only on the latest version of these instructions. Do not explain anything. Output the complete code only.
+No need to share the explanation or other things just need to have the code part so that i would copy paste it and execute it 
+
+From now on when i give the instructions or say anything just check them make the st of instructions and then make the json code. Make sure not to inslcude
+unnecessary data with it i just need the coding part to dave in the json format nothing else.  
+
+code-only mode : output must be in the code form only, no explanation, no markdown, no comments, no formatting, no intro, no outtro, no summary,
+just the final raw code as the outout as i will be copying the output as it is and would be using in my program so strictly just share the 
+code only and for the code as well as i am working in playwright i am sharing the full code access which you can refer to generate the final code as per my 
+requirements.  
+
+
+I am sharing a tutorial for controlling the playwright browser check the code and save it in the memory or just make a note of it so that you can use it later  : 
+
+
+{
+  // Tutorial: Controlling Playwright via JSON Instructions (Beginner to Advanced)
+
+  // We'll use an array of steps under "steps" key for clarity.
+  "steps": [
+
+    // --- Beginner Topics ---
+
+    // 1. Navigate to a URL
+    // Opens the page at the given URL and waits for it to load (default "load" event).
+    {
+      "type": "goto",
+      "url": "https://example.com",
+      "timeout": 30000,
+      "waitUntil": "load"
+      // Required: url; Optional: timeout (ms), waitUntil (load/domcontentloaded/networkidle), referer.
+    },
+
+    // 2. Click an element
+    // Clicks the "More information" link on example.com (identified by link text).
+    {
+      "type": "click",
+      "selector": "text=More information"
+      // Required: selector of element to click.
+      // Optional: button (left/right/middle), clickCount, delay (ms), etc.
+      // This will auto-wait for the element to be visible and enabled.
+    },
+
+    // 3. Fill an input field
+    // Pretend the new page has a login form. Fill in username and password fields.
+    {
+      "type": "fill",
+      "selector": "input[name='username']",
+      "value": "testuser"
+      // Fills the username field with "testuser".
+    },
+    {
+      "type": "fill",
+      "selector": "input[name='password']",
+      "value": "P@ssw0rd"
+      // Fills the password field. (In a real test, avoid using a real password in plain text.)
+    },
+
+    // 4. Wait for a fixed time
+    // Pause for 3 seconds. (Not generally recommended in real tests; used here for demonstration.)
+    {
+      "type": "wait",
+      "milliseconds": 3000
+      // Just a static wait. Better to use conditional waits for real synchronization.
+    },
+
+    // 5. Take a screenshot of the current page
+    // Captures the entire page and saves it as "page-screenshot.png".
+    {
+      "type": "screenshot",
+      "path": "page-screenshot.png",
+      "fullPage": true
+      // If fullPage were false or omitted, it captures only the viewport.
+      // You can also screenshot a specific element by providing a "selector" instead.
+    },
+
+    // 6. Open a new browser tab
+    // This will open a blank new tab (Page) in the same browser context.
+    {
+      "type": "new_tab"
+      // No URL provided, so just opens about:blank. The new tab becomes the active tab.
+    },
+
+    // 7. (Optional) Navigate the new tab to a URL
+    // We can immediately load something in the new tab. For example, example.org.
+    {
+      "type": "goto",
+      "url": "https://example.org"
+      // Now the second tab is at example.org.
+    },
+
+    // 8. Switch back to the first tab
+    // index 0 refers to the first tab (assuming 0-based indexing of opened tabs).
+    {
+      "type": "switch_tab",
+      "index": 0
+      // Subsequent commands will now act on the first tab again.
+    },
+
+    // 9. Close the second tab
+    // Let's close the tab we opened (which was index 1).
+    {
+      "type": "close_tab",
+      "index": 1
+      // Now only the first tab remains open.
+    },
+
+    // --- Advanced Topics ---
+
+    // 10. Upload a file via an <input type="file">
+    // Assume there's a file input for a profile picture with id "avatar".
+    {
+      "type": "upload_files",
+      "selector": "input#avatar",
+      "files": "C:/path/to/avatar.png"
+      // This simulates selecting the file "avatar.png" in the file chooser.
+      // If multiple files are needed, "files" can be an array of paths.
+    },
+
+    // 11. Trigger a file download and wait for it
+    // Let's say clicking a button initiates a download (e.g., a PDF report).
+    {
+      "type": "click",
+      "selector": "text=Download report"
+      // Clicks the "Download report" link or button.
+    },
+    {
+      "type": "download",
+      "saveAs": "C:/downloads/report.pdf"
+      // Waits for the download to complete and saves it to the specified path.
+      // This corresponds to waiting for page.on('download') and then download.saveAs(...).
+    },
+
+    // 12. Intercept network requests: Block images
+    // This will block all image requests (png/jpg/jpeg) from loading, potentially speeding up the page.
+    {
+      "type": "intercept",
+      "urlPattern": "**/*.{png,jpg,jpeg}",
+      "action": "abort"
+      // Any request matching the pattern will be aborted (no network fetch).
+      // Use this to simulate offline images or reduce bandwidth usage.
+    },
+
+    // 13. Intercept network requests: Mock an API response
+    // If the page calls an API endpoint, we can intercept it and provide fake data.
+    {
+      "type": "intercept",
+      "urlPattern": "**/api/data",
+      "action": "fulfill",
+      "status": 200,
+      "contentType": "application/json",
+      "body": "{\"items\": []}"
+      // This catches requests to URLs containing "/api/data" and returns an empty JSON list with HTTP 200.
+      // The page will receive this fake data as if it came from the server.
+    },
+
+    // 14. Handle Basic HTTP Authentication
+    // If upcoming navigations require HTTP Basic Auth, set the credentials.
+    {
+      "type": "authenticate",
+      "username": "admin",
+      "password": "admin"
+      // All pages in this browser context will now use these credentials when challenged.
+      // This should be done before a goto to a protected page.
+    },
+
+    // 15. Log in via a web form (application login)
+    // Navigate to a login page and perform login using form fields.
+    {
+      "type": "goto",
+      "url": "https://example.com/login"
+      // Go to the login page of the application.
+    },
+    {
+      "type": "fill",
+      "selector": "#loginUser",
+      "value": "admin"
+      // Fill the username field (perhaps with id loginUser).
+    },
+    {
+      "type": "fill",
+      "selector": "#loginPass",
+      "value": "password123"
+      // Fill the password field.
+    },
+    {
+      "type": "click",
+      "selector": "#loginSubmit"
+      // Click the Login/Submit button.
+      // This likely triggers a navigation or an AJAX request to log in.
+    },
+
+    // 16. Handle a JavaScript dialog (e.g., alert or confirm)
+    // Prepare to accept a confirmation dialog that might appear, then trigger the action that causes it.
+    {
+      "type": "handle_dialog",
+      "action": "accept",
+      "promptText": "Yes"
+      // Sets up the next dialog to be auto-accepted.
+      // If it's a prompt, "Yes" will be entered; if it's an alert/confirm, promptText is ignored.
+    },
+    {
+      "type": "click",
+      "selector": "#deleteButton"
+      // Clicking this delete button triggers a confirm dialog "Are you sure?".
+      // Our handler will accept it, effectively clicking "OK".
+    },
+
+    // 17. Wait for an element to appear
+    // After some action (like logging in or an AJAX call), wait for a success message to be visible.
+    {
+      "type": "wait_for_element",
+      "selector": "#welcomeMessage",
+      "state": "visible",
+      "timeout": 10000
+      // Wait up to 10s for #welcomeMessage to become visible on the page.
+      // This ensures the login was successful and the welcome message showed up.
+    },
+
+    // 18. Wait for an element to disappear
+    // For example, wait for a loading spinner to go away after an action.
+    {
+      "type": "wait_for_element",
+      "selector": ".loading-spinner",
+      "state": "hidden",
+      "timeout": 10000
+      // Waits until the element with class loading-spinner is hidden or removed.
+      // This indicates loading is complete.
+    }
+
+  ] // end of steps array
+}
+
+
+apart form above the instructions are as follows always open a new tab in the browser and go to the http://localhost:3000/  the sourc ecode for the same is like this : 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Resume Builder</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div id="tab-buttons" class="tab-buttons">
+        <button id="contentTab" class="tab-button active" onclick="showTab('content')">Content</button>
+        <button id="customizeTab" class="tab-button" onclick="showTab('customize')">Customize</button>
+      </div>
+
+      <div id="content" class="tab-content">
+        <div id="sections"></div>
+      </div>
+
+      <div id="customize" class="tab-content" style="display:none;">
+        <div id="customize-controls">
+          <label>Filename:</label>
+          <input type="text" id="filenameInput" placeholder="Enter filename without extension">
+
+          <label>Font Size: <span id="fontSizeValue">14</span>px</label>
+          <input type="range" id="fontSizeSlider" min="10" max="20" value="14" onchange="adjustFontSize()">
+
+          <label>Font Family:</label>
+          <select id="fontFamilySelector" onchange="adjustFontFamily()">
+            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="Tahoma, sans-serif">Tahoma</option>
+          </select>
+
+          <label>Column Split (%): <span id="leftColumnValue">44</span></label>
+          <input type="range" id="columnSplitSlider" min="30" max="70" value="44" onchange="adjustColumns()">
+
+          <label>Margin (mm): <span id="marginValue">20</span></label>
+          <input type="range" id="marginSlider" min="10" max="30" value="20" onchange="adjustMargin()">
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="header">
+        <button id="downloadBtn" class="download-btn" onclick="downloadPDF()">
+          <i class="fas fa-file-download"></i> Download PDF
+        </button>
+      </div>
+
+      <div id="resume" class="resume">
+        <div id="left-column" class="left-column"></div>
+        <div class="divider-line"></div> <!-- Divider line -->
+        <div id="right-column" class="right-column"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+ 
+
+
+now for the each job check the content and then with the above html code you can add the data and then download the resume with the smae resume i want you to apply in the particular job.  
+
+in any case username and password is required do tell me that i will share the username and password but the instructions are clear generate the steps and then apply in jobs 
+
+the concerned website and other things i am sharing in the below chat.  
+

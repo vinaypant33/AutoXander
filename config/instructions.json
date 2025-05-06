@@ -1,0 +1,25 @@
+[
+    {
+      "action": "goto",
+      "url": "https://www.jobs.ie/"
+    },
+    {
+      "action": "wait",
+      "seconds": 3
+    },
+    {
+      "action": "fill",
+      "selector": "input[name='Keywords']",
+      "value": "Data Analyst"
+    },
+    {
+      "action": "fill",
+      "selector": "input[name='Location']",
+      "value": "Dublin"
+    },
+    {
+      "action": "click",
+      "selector": "button[type='submit']"
+    }
+  ]
+  
